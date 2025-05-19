@@ -1,5 +1,7 @@
 package com.openclassrooms.starterjwt.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.starterjwt.dto.SessionDto;
 import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +31,9 @@ public class SessionControllerIntegrationTest {
 
     @Autowired
     private SessionRepository sessionRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUpSession() {
@@ -84,8 +89,13 @@ public class SessionControllerIntegrationTest {
     @Test
     @WithMockUser(username = "user", roles = "USER")
     public void testCreateSessionSuccess() throws Exception {
-        String sessionRequestJson = "{ \"name\": \"New Session\", \"description\": \"New session description\", " +
-                "\"date\": \"2025-08-26T12:00:00.000+00:00\", \"teacher_id\": 1 }";
+        SessionDto sessionDto = new SessionDto();
+        sessionDto.setName("New Session");
+        sessionDto.setDescription("New session description");
+        sessionDto.setDate(Timestamp.from(Instant.parse("2025-08-26T12:00:00Z")));
+        sessionDto.setTeacher_id(1L);
+
+        String sessionRequestJson = objectMapper.writeValueAsString(sessionDto);
 
         mockMvc.perform(post("/api/session")
                         .contentType("application/json")
@@ -102,8 +112,13 @@ public class SessionControllerIntegrationTest {
     @Test
     @WithMockUser(username = "user", roles = "USER")
     public void testUpdateSessionSuccess() throws Exception {
-        String sessionUpdateJson = "{ \"name\": \"Updated Session\", \"description\": \"Updated description\", " +
-                "\"date\": \"2025-08-26T12:00:00.000+00:00\", \"teacher_id\": 1 }";
+        SessionDto sessionDto = new SessionDto();
+        sessionDto.setName("Updated Session");
+        sessionDto.setDescription("Updated description");
+        sessionDto.setDate(Timestamp.from(Instant.parse("2025-08-26T12:00:00Z")));
+        sessionDto.setTeacher_id(1L);
+
+        String sessionUpdateJson = objectMapper.writeValueAsString(sessionDto);
 
         mockMvc.perform(put("/api/session/{id}", 1L)
                         .contentType("application/json")
@@ -119,8 +134,13 @@ public class SessionControllerIntegrationTest {
     @Test
     @WithMockUser(username = "user", roles = "USER")
     public void testUpdateSessionInvalidId() throws Exception {
-        String sessionUpdateJson = "{ \"name\": \"Invalid Session\", \"description\": \"Invalid session id\", " +
-                "\"date\": \"2025-08-26T12:00:00.000+00:00\", \"teacher_id\": 1 }";
+        SessionDto sessionDto = new SessionDto();
+        sessionDto.setName("Invalid Session");
+        sessionDto.setDescription("Invalid session id");
+        sessionDto.setDate(Timestamp.from(Instant.parse("2025-08-26T12:00:00Z")));
+        sessionDto.setTeacher_id(1L);
+
+        String sessionUpdateJson = objectMapper.writeValueAsString(sessionDto);
 
         mockMvc.perform(put("/api/session/{id}", "abc")
                         .contentType("application/json")

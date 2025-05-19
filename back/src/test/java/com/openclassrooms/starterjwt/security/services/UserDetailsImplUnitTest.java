@@ -72,6 +72,7 @@ class UserDetailsImplUnitTest {
     @Test
     void testOtherObjectNullExpectedFalse() {
         UserDetailsImpl user = UserDetailsImpl.builder().id(1L).build();
+
         assertNotEquals(null, user);
     }
 
@@ -79,6 +80,7 @@ class UserDetailsImplUnitTest {
     void testOtherObjectDiffTypeExpFalse() {
         UserDetailsImpl user = UserDetailsImpl.builder().id(1L).build();
         Object other = new Object();
+
         assertNotEquals(user, other);
     }
 
