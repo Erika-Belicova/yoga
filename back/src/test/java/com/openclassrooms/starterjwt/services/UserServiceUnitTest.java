@@ -1,5 +1,6 @@
 package com.openclassrooms.starterjwt.services;
 
+import com.openclassrooms.starterjwt.mock.MockUser;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -28,16 +28,7 @@ public class UserServiceUnitTest {
 
     @Test
     void testFindByIdUserExists() {
-        User mockUser = User.builder()
-                .id(1L)
-                .email("jean@dupont.com")
-                .firstName("Jean")
-                .lastName("Dupont")
-                .password("password")
-                .admin(false)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        User mockUser = MockUser.buildUserFindById();
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(mockUser));
         User result = userService.findById(1L);

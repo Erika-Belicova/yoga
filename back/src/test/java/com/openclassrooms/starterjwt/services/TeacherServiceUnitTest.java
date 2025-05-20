@@ -1,5 +1,6 @@
 package com.openclassrooms.starterjwt.services;
 
+import com.openclassrooms.starterjwt.mock.MockTeacher;
 import com.openclassrooms.starterjwt.models.Teacher;
 import com.openclassrooms.starterjwt.repository.TeacherRepository;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,14 +27,7 @@ public class TeacherServiceUnitTest {
 
     @Test
     void testFindByIdTeacherExists() {
-        Teacher mockTeacher = Teacher.builder()
-                .id(1L)
-                .firstName("Jean")
-                .lastName("Dupont")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
+        Teacher mockTeacher = MockTeacher.buildTeacherFindById();
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(mockTeacher));
         Teacher result = teacherService.findById(1L);
 
@@ -52,27 +45,7 @@ public class TeacherServiceUnitTest {
 
     @Test
     void testFindAllTeachersExists() {
-        Teacher teacher1 = Teacher.builder()
-                .id(1L).firstName("Jean")
-                .lastName("Dupont")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now()).build();
-
-        Teacher teacher2 = Teacher.builder()
-                .id(2L).firstName("Martin")
-                .lastName("Dubois")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        Teacher teacher3 = Teacher.builder()
-                .id(3L).firstName("Philippe")
-                .lastName("Beaumont")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        List<Teacher> mockTeachers = List.of(teacher1, teacher2, teacher3);
+        List<Teacher> mockTeachers = MockTeacher.buildTeacherListForFindAll();
         when(teacherRepository.findAll()).thenReturn(mockTeachers);
         List<Teacher> returnedTeachers = teacherService.findAll();
 

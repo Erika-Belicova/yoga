@@ -111,7 +111,10 @@ public class AuthControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
               //  .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.username").value("claire@studio.com"));
+                .andExpect(jsonPath("$.username").value("claire@studio.com"))
+                .andExpect(jsonPath("$.firstName").value("Claire"))
+                .andExpect(jsonPath("$.lastName").value("Perret"))
+                .andExpect(jsonPath("$.admin").value(false));
     }
 
 
