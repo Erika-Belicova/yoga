@@ -2,6 +2,8 @@ package com.openclassrooms.starterjwt.services;
 
 import com.openclassrooms.starterjwt.exception.BadRequestException;
 import com.openclassrooms.starterjwt.exception.NotFoundException;
+import com.openclassrooms.starterjwt.mock.MockSession;
+import com.openclassrooms.starterjwt.mock.MockUser;
 import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
@@ -12,9 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -31,83 +31,15 @@ public class SessionServiceUnitTest {
     @InjectMocks
     private SessionService sessionService;
 
-    private List<User> createMockUsers() {
-        User user1 = User.builder()
-                .id(1L)
-                .email("jean@dupont.com")
-                .firstName("Jean")
-                .lastName("Dupont")
-                .password("password")
-                .admin(false)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        User user2 = User.builder()
-                .id(2L)
-                .email("martin@dubois.com")
-                .firstName("Martin")
-                .lastName("Dubois")
-                .password("password")
-                .admin(false)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        User user3 = User.builder()
-                .id(3L)
-                .email("philippe@beaumont.com")
-                .firstName("Philippe")
-                .lastName("Beaumont")
-                .password("password")
-                .admin(false)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        return new ArrayList<>(Arrays.asList(user1, user2, user3));
-    }
-
-    private Session createMockSession() {
-        List<User> mockUsers = createMockUsers();
-
-        return Session.builder()
-                .id(1L)
-                .name("Session")
-                .date(new Date())
-                .description("A lovely workout session")
-                .users(mockUsers)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-    }
-
     @Test
     void testCreateSessionWasCreated() {
-        Session mockSession = createMockSession();
+        Session mockSession = MockSession.createSessionWithUsers();
         when(sessionRepository.save(eq(mockSession))).thenReturn(mockSession);
         Session result = sessionService.create(mockSession);
 
         assertNotNull(result);
         assertEquals("Session", result.getName());
         verify(sessionRepository).save(eq(mockSession));
-    }
-
-    @Test
-    void testCreateSessionNotCreated() {
-        List<User> mockUsers = createMockUsers();
-
-        Session invalidSession = Session.builder()
-                .id(1L)
-                .name(null)
-                .date(null)
-                .description("A nice session")
-                .users(mockUsers)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        verify(sessionRepository, never()).save(invalidSession);
     }
 
     @Test
@@ -118,40 +50,7 @@ public class SessionServiceUnitTest {
 
     @Test
     void testFindAllSessionsExists() {
-        List<User> mockUsers = createMockUsers();
-
-        Session session1 = Session.builder()
-                .id(1L)
-                .name("Session 1")
-                .date(new Date())
-                .description("A lovely workout session")
-                .users(mockUsers)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        Session session2 = Session.builder()
-                .id(2L)
-                .name("Session 2")
-                .date(new Date())
-                .description("A second lovely workout session")
-                .users(mockUsers)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        Session session3 = Session.builder()
-                .id(3L)
-                .name("Session 3")
-                .date(new Date())
-                .description("A third lovely workout session")
-                .users(mockUsers)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        List<Session> mockSessions = List.of(session1, session2, session3);
-
+        List<Session> mockSessions = MockSession.sessionsForFindAll();
         when(sessionRepository.findAll()).thenReturn(mockSessions);
         List<Session> returnedSessions = sessionService.findAll();
 
@@ -173,13 +72,13 @@ public class SessionServiceUnitTest {
 
     @Test
     void testGetByIdSessionExists() {
-        Session mockSession = createMockSession();
+        Session mockSession = MockSession.createSessionWithUsers();
         when(sessionRepository.findById(1L)).thenReturn(Optional.of(mockSession));
         Session result = sessionService.getById(1L);
 
         assertNotNull(result);
         assertEquals("Session", result.getName());
-        assertEquals("A lovely workout session", result.getDescription());
+        assertEquals("A workout session", result.getDescription());
         assertEquals(3, result.getUsers().size());
     }
 
@@ -192,17 +91,8 @@ public class SessionServiceUnitTest {
 
     @Test
     void testUpdateSession() {
-        Session oldSession = createMockSession();
-
-        Session updatedSession = Session.builder()
-                .id(1L)
-                .name("Garden Session")
-                .date(new Date())
-                .description("A garden workout session")
-                .users(oldSession.getUsers())
-                .createdAt(oldSession.getCreatedAt())
-                .updatedAt(LocalDateTime.now().plusMinutes(1))
-                .build();
+        Session oldSessionData = MockSession.createSessionWithUsers();
+        Session updatedSession = MockSession.updatedSession(oldSessionData);
 
         when(sessionRepository.save(eq(updatedSession))).thenReturn(updatedSession);
         Session result = sessionService.update(1L, updatedSession);
@@ -231,18 +121,8 @@ public class SessionServiceUnitTest {
 
     @Test
     void testParticipateSuccess() {
-        Session mockSession = createMockSession();
-
-        User mockUser = User.builder()
-                .id(4L)
-                .email("anna@vert.com")
-                .firstName("Anna")
-                .lastName("Vert")
-                .password("password")
-                .admin(false)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        Session mockSession = MockSession.createSessionWithUsers();
+        User mockUser = MockUser.buildUserSessionParticipation();
 
         when(sessionRepository.findById(mockSession.getId())).thenReturn(Optional.of(mockSession));
         when(userRepository.findById(mockUser.getId())).thenReturn(Optional.of(mockUser));
@@ -256,7 +136,7 @@ public class SessionServiceUnitTest {
 
     @Test
     void testUserAlreadyParticipates() {
-        Session mockSession = createMockSession();
+        Session mockSession = MockSession.createSessionWithUsers();
         User mockUser = mockSession.getUsers().get(0);
 
         when(sessionRepository.findById(mockSession.getId())).thenReturn(Optional.of(mockSession));
@@ -280,7 +160,7 @@ public class SessionServiceUnitTest {
 
     @Test
     void testNoLongerParticipatesSuccess() {
-        Session mockSession = createMockSession();
+        Session mockSession = MockSession.createSessionWithUsers();
         User mockUser = mockSession.getUsers().get(0);
 
         when(sessionRepository.findById(mockSession.getId())).thenReturn(Optional.of(mockSession));
