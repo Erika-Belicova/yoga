@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
 
-class JwtUtilsUnitTest {
+class JwtUtilsTest {
 
     private JwtUtils jwtUtils;
 

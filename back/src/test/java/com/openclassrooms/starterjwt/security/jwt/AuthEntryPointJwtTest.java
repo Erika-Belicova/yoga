@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 
-class AuthEntryPointJwtUnitTest {
+class AuthEntryPointJwtTest {
 
     private AuthEntryPointJwt authEntryPointJwt;
 

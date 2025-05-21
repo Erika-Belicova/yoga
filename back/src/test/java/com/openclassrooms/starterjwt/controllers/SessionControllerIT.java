@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class SessionControllerIntegrationTest {
+public class SessionControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
@@ -136,7 +136,7 @@ public class SessionControllerIntegrationTest {
     public void testUpdateSessionInvalidId() throws Exception {
         SessionDto sessionDto = new SessionDto();
         sessionDto.setName("Invalid Session");
-        sessionDto.setDescription("Invalid session id");
+        sessionDto.setDescription("Invalid session");
         sessionDto.setDate(Timestamp.from(Instant.parse("2025-08-26T12:00:00Z")));
         sessionDto.setTeacher_id(1L);
 

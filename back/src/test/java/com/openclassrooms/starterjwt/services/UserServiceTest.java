@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceUnitTest {
+public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -42,12 +42,14 @@ public class UserServiceUnitTest {
     void testFindByIdUserNotFound() {
         when(userRepository.findById(9999L)).thenReturn(Optional.empty());
         User result = userService.findById(9999L);
+
         assertNull(result);
     }
 
     @Test
     void testDelete() {
         userService.delete(1L);
+
         verify(userRepository).deleteById(1L);
     }
 }

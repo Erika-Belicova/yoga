@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-class UserDetailsServiceImplUnitTest {
+class UserDetailsServiceImplTest {
 
     private UserRepository userRepository;
     private UserDetailsServiceImpl userDetailsService;
