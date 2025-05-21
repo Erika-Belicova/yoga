@@ -17,7 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @ExtendWith(MockitoExtension.class)
-class AuthTokenFilterUnitTest {
+class AuthTokenFilterTest {
 
     @InjectMocks
     private AuthTokenFilter authTokenFilter;

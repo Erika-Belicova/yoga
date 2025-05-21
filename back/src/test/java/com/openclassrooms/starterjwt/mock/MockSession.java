@@ -58,19 +58,6 @@ public class MockSession {
         return List.of(session1, session2, session3);
     }
 
-    public static Session invalidSessionMissingNameAndDate() {
-        List<User> users = MockUser.buildUsersForSession();
-        return Session.builder()
-                .id(1L)
-                .name(null)
-                .date(null)
-                .description("A nice session")
-                .users(users)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-    }
-
     public static Session updatedSession(Session oldSessionData) {
         return Session.builder()
                 .id(oldSessionData.getId())

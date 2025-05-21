@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserDetailsImplUnitTest {
+class UserDetailsImplTest {
 
     private UserDetailsImpl createUser(Long id, Boolean admin) {
         return UserDetailsImpl.builder()
@@ -20,18 +20,21 @@ class UserDetailsImplUnitTest {
     @Test
     void testEqualsSameObjectExpectedTrue() {
         UserDetailsImpl user = createUser(1L, false);
+
         assertEquals(user, user);
     }
 
     @Test
     void testEqualsNullExpectedFalse() {
         UserDetailsImpl user = createUser(1L, false);
+
         assertNotEquals(null, user);
     }
 
     @Test
     void testEqualsDiffClassExpectedFalse() {
         UserDetailsImpl user = createUser(1L, false);
+
         assertNotEquals("not a UserDetailsImpl", user);
     }
 
@@ -39,6 +42,7 @@ class UserDetailsImplUnitTest {
     void testEqualsDiffIdExpectedFalse() {
         UserDetailsImpl user1 = createUser(1L, false);
         UserDetailsImpl user2 = createUser(2L, false);
+
         assertNotEquals(user1, user2);
     }
 
@@ -46,6 +50,7 @@ class UserDetailsImplUnitTest {
     void testEqualsSameIdExpectedTrue() {
         UserDetailsImpl user1 = createUser(1L, false);
         UserDetailsImpl user2 = createUser(1L, true);
+
         assertEquals(user1, user2);
     }
 
@@ -53,6 +58,7 @@ class UserDetailsImplUnitTest {
     void testEqualsBothNullIdExpectedTrue() {
         UserDetailsImpl user1 = createUser(null, false);
         UserDetailsImpl user2 = createUser(null, true);
+
         assertEquals(user1, user2);
     }
 
@@ -60,12 +66,14 @@ class UserDetailsImplUnitTest {
     void testEqualsOneNullIdExpectedFalse() {
         UserDetailsImpl user1 = createUser(null, false);
         UserDetailsImpl user2 = createUser(1L, true);
+
         assertNotEquals(user1, user2);
     }
 
     @Test
     void testOtherObjectNullExpectedFalse() {
         UserDetailsImpl user = createUser(1L, false);
+
         assertNotEquals(null, user);
     }
 
@@ -73,6 +81,7 @@ class UserDetailsImplUnitTest {
     void testOtherObjectDiffTypeExpFalse() {
         UserDetailsImpl user = createUser(1L, false);
         Object other = new Object();
+
         assertNotEquals(user, other);
     }
 
@@ -80,6 +89,7 @@ class UserDetailsImplUnitTest {
     void testIdsAndClassAreSameExpTrue() {
         UserDetailsImpl user1 = createUser(1L, false);
         UserDetailsImpl user2 = createUser(1L, false);
+
         assertEquals(user1, user2);
     }
 

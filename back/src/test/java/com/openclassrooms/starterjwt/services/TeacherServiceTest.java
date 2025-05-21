@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TeacherServiceUnitTest {
+public class TeacherServiceTest {
 
     @Mock
     private TeacherRepository teacherRepository;
@@ -40,6 +40,7 @@ public class TeacherServiceUnitTest {
     void testFindByIdTeacherNotFound() {
         when(teacherRepository.findById(9999L)).thenReturn(Optional.empty());
         Teacher result = teacherService.findById(9999L);
+
         assertNull(result);
     }
 

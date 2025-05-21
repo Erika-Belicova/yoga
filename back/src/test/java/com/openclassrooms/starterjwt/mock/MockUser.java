@@ -71,17 +71,4 @@ public class MockUser {
 
         return new ArrayList<>(Arrays.asList(user1, user2, user3));
     }
-
-    public static User buildUserForLogin() {
-        return User.builder()
-                .id(5L)
-                .email("login@example.com")
-                .firstName("Login")
-                .lastName("Tester")
-                .password("password")
-                .admin(false)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-    }
 }

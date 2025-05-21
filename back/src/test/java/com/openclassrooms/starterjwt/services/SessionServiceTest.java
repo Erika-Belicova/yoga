@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SessionServiceUnitTest {
+public class SessionServiceTest {
 
     @Mock
     private SessionRepository sessionRepository;
@@ -45,6 +45,7 @@ public class SessionServiceUnitTest {
     @Test
     void testDelete() {
         sessionService.delete(1L);
+
         verify(sessionRepository).deleteById(1L);
     }
 
@@ -86,6 +87,7 @@ public class SessionServiceUnitTest {
     void testGetByIdSessionNotFound() {
         when(sessionRepository.findById(9999L)).thenReturn(Optional.empty());
         Session result = sessionService.getById(9999L);
+
         assertNull(result);
     }
 
@@ -108,6 +110,7 @@ public class SessionServiceUnitTest {
     @Test
     void testParticipateSessionNotFound() {
         when(sessionRepository.findById(9999L)).thenReturn(Optional.empty());
+
         assertThrows(NotFoundException.class, () -> sessionService.participate(9999L, 1L));
         verify(sessionRepository, never()).save(any(Session.class));
     }
@@ -115,6 +118,7 @@ public class SessionServiceUnitTest {
     @Test
     void testParticipateUserNotFound() {
         when(userRepository.findById(9999L)).thenReturn(Optional.empty());
+
         assertThrows(NotFoundException.class, () -> sessionService.participate(1L, 9999L));
         verify(sessionRepository, never()).save(any(Session.class));
     }
@@ -165,8 +169,8 @@ public class SessionServiceUnitTest {
 
         when(sessionRepository.findById(mockSession.getId())).thenReturn(Optional.of(mockSession));
         sessionService.noLongerParticipate(mockSession.getId(), mockUser.getId());
-        assertFalse(mockSession.getUsers().contains(mockUser));
 
+        assertFalse(mockSession.getUsers().contains(mockUser));
         verify(sessionRepository).save(eq(mockSession));
         assertEquals(2, mockSession.getUsers().size());
     }
