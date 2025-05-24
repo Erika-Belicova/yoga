@@ -24,8 +24,8 @@ describe('SessionService', () => {
     expect(value).toBe(false);
   });
 
-  it('should do login for mockSession and return true', async () => {
-    const mockSession: SessionInformation = { 
+  it('should do login with mockSessionInformation and return true', async () => {
+    const mockSessionInformation: SessionInformation = { 
       token: 'token',
       type: 'type',
       id: 1,
@@ -35,17 +35,17 @@ describe('SessionService', () => {
       admin: false
     };
 
-    service.logIn(mockSession);
+    service.logIn(mockSessionInformation);
     
     expect(service.isLogged).toBe(true);
-    expect(service.sessionInformation).toEqual(mockSession);
+    expect(service.sessionInformation).toEqual(mockSessionInformation);
 
     const value = await firstValueFrom(service.$isLogged());
     expect(value).toBe(true);
   });
 
-  it('should do logout for mockSession and return false for $isLogged', async () => {
-    const mockSession: SessionInformation = { 
+  it('should do logout with mockSessionInformation and return false for $isLogged', async () => {
+    const mockSessionInformation: SessionInformation = { 
       token: 'token',
       type: 'type',
       id: 1,
@@ -55,7 +55,7 @@ describe('SessionService', () => {
       admin: false
     };
 
-    service.logIn(mockSession);
+    service.logIn(mockSessionInformation);
     service.logOut();
     
     expect(service.isLogged).toBe(false);
