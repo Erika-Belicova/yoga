@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { expect } from '@jest/globals';
-import { SessionInformation } from '../interfaces/sessionInformation.interface';
-import { SessionService } from './session.service';
 import { firstValueFrom } from 'rxjs';
+
+import { SessionService } from './session.service';
+import { mockSessionInformation } from '../mocks/session.information.mocks';
 
 describe('SessionService', () => {
   let service: SessionService;
@@ -16,7 +17,7 @@ describe('SessionService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('initial state should be false or undefined', async () => {
+  it('should initialize with logged out state', async () => {
     expect(service.isLogged).toBeFalsy();
     expect(service.sessionInformation).toBeUndefined();
 
@@ -24,17 +25,7 @@ describe('SessionService', () => {
     expect(value).toBe(false);
   });
 
-  it('should do login with mockSessionInformation and return true', async () => {
-    const mockSessionInformation: SessionInformation = { 
-      token: 'token',
-      type: 'type',
-      id: 1,
-      username: 'claire@perret.com',
-      firstName: 'Claire',
-      lastName: 'Perret',
-      admin: false
-    };
-
+  it('should do login with session information and return true', async () => {
     service.logIn(mockSessionInformation);
     
     expect(service.isLogged).toBe(true);
@@ -44,17 +35,7 @@ describe('SessionService', () => {
     expect(value).toBe(true);
   });
 
-  it('should do logout with mockSessionInformation and return false for $isLogged', async () => {
-    const mockSessionInformation: SessionInformation = { 
-      token: 'token',
-      type: 'type',
-      id: 1,
-      username: 'claire@perret.com',
-      firstName: 'Claire',
-      lastName: 'Perret',
-      admin: false
-    };
-
+  it('should do logout and update logged state to false', async () => {
     service.logIn(mockSessionInformation);
     service.logOut();
     
