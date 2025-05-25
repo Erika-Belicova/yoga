@@ -1,22 +1,27 @@
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { expect } from '@jest/globals';
-import { of } from 'rxjs';
+
 import { TeacherService } from './teacher.service';
-import { Teacher } from '../interfaces/teacher.interface';
+import { mockTeacher, mockTeachers } from '../mocks/teacher.mocks';
 
 describe('TeacherService', () => {
   let service: TeacherService;
-  let httpClient: HttpClient;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports:[
-        HttpClientModule
+        HttpClientTestingModule
       ]
     });
+
     service = TestBed.inject(TeacherService);
-    httpClient = TestBed.inject(HttpClient);
+    httpTestingController = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('should be created', () => {
@@ -24,54 +29,53 @@ describe('TeacherService', () => {
   });
 
   it('should call GET /api/teacher and return all teachers', () => {
-    const mockTeachers: Teacher[] = [
-      {
-        id: 1,
-        lastName: 'Jean',
-        firstName: 'Dupont',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 2,
-        lastName: 'Thomas',
-        firstName: 'Martin',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 3,
-        lastName: 'Claire',
-        firstName: 'Beaumont',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    ];
-
-    const httpGetSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of(mockTeachers));
-
-    service.all().subscribe((result) => {
-      expect(result).toEqual(mockTeachers);
+    service.all().subscribe((teachers) => {
+      expect(teachers).toEqual(mockTeachers);
     });
 
-    expect(httpGetSpy).toHaveBeenCalledWith('api/teacher');
+    const req = httpTestingController.expectOne('api/teacher');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockTeachers);
   });
 
   it('should call GET /api/teacher/:id and return mockTeacher', () => {
-    const mockTeacher: Teacher = {
-      id: 1,
-      lastName: 'Jean',
-      firstName: 'Dupont',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const httpGetSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of(mockTeacher));
-
-    service.detail('1').subscribe((result) => {
-      expect(result).toEqual(mockTeacher);
+    service.detail('1').subscribe((teacher) => {
+      expect(teacher).toEqual(mockTeacher);
     });
 
-    expect(httpGetSpy).toHaveBeenCalledWith('api/teacher/1');
+    const req = httpTestingController.expectOne('api/teacher/1');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockTeacher);
+  });
+
+  it('should handle wrong id on GET /api/teacher/:id', () => {
+    service.detail('abc').subscribe({
+      next: () => {
+        throw new Error('Expected an error, but got a response');
+      },
+      error: (error) => {
+        expect(error.status).toBe(400);
+        expect(error.statusText).toBe('Bad Request');
+      }
+    });
+
+    const req = httpTestingController.expectOne('api/teacher/abc');
+    expect(req.request.method).toBe('GET');
+    req.flush('Bad Request', { status: 400, statusText: 'Bad Request' });
+  });
+
+  it('should handle 404 error on GET /api/teacher/:id when teacher not found', () => {
+    service.detail('9999').subscribe({
+      next: () => {
+        throw new Error('Expected an error, but got a response');
+      },
+      error: (error) => {
+        expect(error.status).toBe(404);
+        expect(error.statusText).toBe('Not Found');
+      }
+    });
+
+    const req = httpTestingController.expectOne('api/teacher/9999');
+    req.flush('User not found', { status: 404, statusText: 'Not Found' });
   });
 });
