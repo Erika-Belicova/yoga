@@ -43,3 +43,12 @@ export const mockSessions: Session[] = [
     updatedAt: new Date('2025-02-26T17:00:00')
   }
 ];
+
+export const mockUpdatedSession: Session = {
+  id: 1,
+  name: 'Updated Session',
+  description: 'Updated description',
+  date: new Date(),
+  teacher_id: 1,
+  users: [1,2]
+};
