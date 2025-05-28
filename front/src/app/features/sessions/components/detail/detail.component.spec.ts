@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { expect } from '@jest/globals'; 
+import { expect } from '@jest/globals';
 
 import { DetailComponent } from './detail.component';
 import { SessionService } from '../../../../services/session.service';
@@ -17,7 +17,7 @@ import { mockSession } from '../../../../mocks/session.mocks';
 
 describe('DetailComponent', () => {
   let component: DetailComponent;
-  let fixture: ComponentFixture<DetailComponent>; 
+  let fixture: ComponentFixture<DetailComponent>;
   let sessionApiService: SessionApiService;
 
   let httpTestingController: HttpTestingController;
@@ -98,7 +98,7 @@ describe('DetailComponent', () => {
   });
 
   it('should verify that back has been called', () => {
-    const backSpy = jest.spyOn(window.history, 'back').mockImplementation(() => {});
+    const backSpy = jest.spyOn(window.history, 'back').mockImplementation(() => { });
     component.back();
 
     expect(backSpy).toHaveBeenCalled();
@@ -187,19 +187,6 @@ describe('DetailComponent', () => {
   });
 
   it('should load session and teacher on ngOnInit', () => {
-    component.ngOnInit();
-
-    const sessionReq = httpTestingController.expectOne('api/session/1');
-    sessionReq.flush(mockSession);
-
-    const teacherReq = httpTestingController.expectOne(`api/teacher/${mockSession.teacher_id}`);
-    teacherReq.flush(mockTeacher);
-
-    expect(component.session).toEqual(mockSession);
-    expect(component.teacher).toEqual(mockTeacher);
-  });
-
-  it('should update session and teacher when ngOnInit is called', () => {
     component.ngOnInit();
 
     const sessionReq = httpTestingController.expectOne('api/session/1');
