@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {  ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +18,7 @@ import { FormComponent } from './form.component';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { TeacherService } from 'src/app/services/teacher.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { mockTeachers } from 'src/app/mocks/teacher.mocks';
 import { mockSession, mockUpdatedSession } from 'src/app/mocks/session.mocks';
 
@@ -37,7 +37,7 @@ describe('FormComponent', () => {
     sessionInformation: {
       admin: true
     }
-  } 
+  }
 
   beforeEach(async () => {
     sessionApiService = {
@@ -56,7 +56,7 @@ describe('FormComponent', () => {
         MatIconModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule, 
+        ReactiveFormsModule,
         MatSnackBarModule,
         MatSelectModule,
         BrowserAnimationsModule,
@@ -92,6 +92,15 @@ describe('FormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should not redirect if user is admin', () => {
+    const routerSpy = jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockSessionService.sessionInformation.admin = true;
+
+    component.ngOnInit();
+
+    expect(routerSpy).not.toHaveBeenCalled();
   });
 
   it('should initialize the form with empty fields in create mode', () => {
