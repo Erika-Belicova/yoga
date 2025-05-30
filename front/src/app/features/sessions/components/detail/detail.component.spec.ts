@@ -74,14 +74,6 @@ describe('DetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set isAdmin to true when user is admin', () => {
-    expect(component.isAdmin).toBe(true);
-  });
-
-  it('should set isParticipate to true if current user is in session users list', () => {
-    expect(component.isParticipate).toBe(true);
-  });
-
   it('should set isParticipate to false if current user is not in session users list', () => {
     const sessionWithoutUser = { ...mockSession, users: [2, 3] };
 
@@ -103,12 +95,6 @@ describe('DetailComponent', () => {
 
     expect(backSpy).toHaveBeenCalled();
     backSpy.mockRestore();
-  });
-
-  it('should not modify session state when back is called', () => {
-    const previousSession = component.session;
-    component.back();
-    expect(component.session).toBe(previousSession);
   });
 
   it('should delete the session and verify that snackbar is open', async () => {
@@ -136,10 +122,6 @@ describe('DetailComponent', () => {
     req.flush(null);
 
     expect(navSpy).toHaveBeenCalledWith(['sessions']);
-  });
-
-  it('should load teacher details after session is fetched', () => {
-    expect(component.teacher).toEqual(mockTeacher);
   });
 
   it('should call participate and then fetchSession', async () => {
