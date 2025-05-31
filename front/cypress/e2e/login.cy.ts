@@ -1,7 +1,11 @@
-describe('Login spec', () => {
-  it('Login successfull', () => {
-    cy.visit('/login')
+/// <reference types="cypress" />
 
+describe('Login spec', () => {
+  beforeEach(() => {
+    cy.visit('/login')
+  });
+
+  it('Login successfull', () => {
     cy.intercept('POST', '/api/auth/login', {
       body: {
         id: 1,
