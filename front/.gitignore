@@ -42,3 +42,7 @@ testem.log
 Thumbs.db
 
 **/.DS_Store 
+
+# Coverage
+coverage/
+.nyc_output/
