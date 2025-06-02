@@ -44,7 +44,6 @@ describe('Login spec', () => {
   })
 
   it('Validation when required fields are empty', () => {
-
     cy.get('input[formControlName=email]').click().blur()
     cy.get('input[formControlName=email]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
 
