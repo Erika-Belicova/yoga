@@ -30,5 +30,5 @@ describe('Logout spec', () => {
     cy.contains('span.link', 'Logout').click()
 
     cy.url().should('include', '')
-  })
+  });
 });
