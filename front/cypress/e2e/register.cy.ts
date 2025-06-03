@@ -22,7 +22,7 @@ describe('Register spec', () => {
     cy.get('input[formControlName=password]').type(`${"password"}{enter}{enter}`)
 
     cy.url().should('include', '/login')
-  })
+  });
 
   it('Register failed', () => {
     cy.intercept('POST', '/api/auth/register', {
@@ -38,7 +38,7 @@ describe('Register spec', () => {
     cy.get('.error').should('be.visible').and('contain', 'An error occurred')
 
     cy.url().should('include', '/register')
-  })
+  });
 
   it('Validation when required fields are empty', () => {
     cy.get('input[formControlName=firstName]').click().blur()
@@ -54,5 +54,5 @@ describe('Register spec', () => {
     cy.get('input[formControlName=password]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
 
     cy.url().should('include', '/register')
-  })
+  });
 });

@@ -27,7 +27,7 @@ describe('Login spec', () => {
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
 
     cy.url().should('include', '/sessions')
-  })
+  });
 
   it('Login failed', () => {
     cy.intercept('POST', '/api/auth/login', {
@@ -41,7 +41,7 @@ describe('Login spec', () => {
     cy.get('.error').should('be.visible').and('contain', 'An error occurred')
 
     cy.url().should('include', '/login')
-  })
+  });
 
   it('Validation when required fields are empty', () => {
     cy.get('input[formControlName=email]').click().blur()
@@ -51,5 +51,5 @@ describe('Login spec', () => {
     cy.get('input[formControlName=password]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
 
     cy.url().should('include', '/login')
-  })
+  });
 });
