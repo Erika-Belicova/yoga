@@ -13,22 +13,17 @@ describe('Logout spec', () => {
       },
     })
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/session',
-      },
-      []).as('session')
+    cy.intercept('GET', '/api/session', [])
 
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
   });
 
-  it('Logout successfull', () => {
+  it('Logout is successful', () => {
     cy.contains('span.link', 'Logout').click()
 
-    cy.url().should('include', '')
+    cy.url().should('eq', Cypress.config().baseUrl)
   });
 });

@@ -14,13 +14,6 @@ describe('NotFound spec', () => {
       },
     })
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/session',
-      },
-      []).as('session')
-
     cy.intercept('GET', '/api/session', {
       body: [
         {
@@ -44,17 +37,17 @@ describe('NotFound spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    }).as('sessions')
+    })
   });
 
   it('Redirect to page not found', () => {
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
 
     cy.visit('/login/user')
 
-    cy.get('h1').should('contain.text', 'Page not found !').should('be.visible')
+    cy.get('h1').should('be.visible').and('contain.text', 'Page not found !')
   });
 });

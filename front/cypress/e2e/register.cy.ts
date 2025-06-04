@@ -5,7 +5,7 @@ describe('Register spec', () => {
     cy.visit('/register')
   });
 
-  it('Register successfull', () => {
+  it('Register is successful', () => {
     cy.intercept('POST', '/api/auth/register', {
       body: {
         id: 2,
@@ -16,24 +16,26 @@ describe('Register spec', () => {
       },
     })
 
-    cy.get('input[formControlName=firstName]').type("Yoga")
-    cy.get('input[formControlName=lastName]').type("Studio")
-    cy.get('input[formControlName=email]').type("test@studio.com")
-    cy.get('input[formControlName=password]').type(`${"password"}{enter}{enter}`)
+    cy.intercept('GET', '/api/session', [])
+
+    cy.get('input[formControlName=firstName]').type('Yoga')
+    cy.get('input[formControlName=lastName]').type('Studio')
+    cy.get('input[formControlName=email]').type('test@studio.com')
+    cy.get('input[formControlName=password]').type('password{enter}{enter}')
 
     cy.url().should('include', '/login')
   });
 
-  it('Register failed', () => {
+  it('Register fails', () => {
     cy.intercept('POST', '/api/auth/register', {
       statusCode: 401,
       body: {}
     })
 
-    cy.get('input[formControlName=firstName]').type("Yoga")
-    cy.get('input[formControlName=lastName]').type("Studio")
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"password"}{enter}{enter}`)
+    cy.get('input[formControlName=firstName]').type('Yoga')
+    cy.get('input[formControlName=lastName]').type('Studio')
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('password{enter}{enter}')
 
     cy.get('.error').should('be.visible').and('contain', 'An error occurred')
 

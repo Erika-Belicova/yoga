@@ -1,8 +1,11 @@
 /// <reference types="cypress" />
 
 describe('Me spec', () => {
-  it('Show account information (admin)', () => {
+  beforeEach(() => {
     cy.visit('/login')
+  });
+
+  it('Show account information (admin)', () => {
     cy.intercept('POST', '/api/auth/login', {
       body: {
         id: 1,
@@ -13,12 +16,7 @@ describe('Me spec', () => {
       },
     })
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/session',
-      },
-      []).as('session')
+    cy.intercept('GET', '/api/session', [])
 
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
@@ -53,27 +51,7 @@ describe('Me spec', () => {
     cy.url().should('include', '/sessions')
   });
 
-  it('Show account information (user)', () => {
-    cy.visit('/register')
-
-    cy.intercept('POST', '/api/auth/register', {
-      body: {
-        id: 2,
-        username: 'userName',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        admin: false
-      },
-    })
-
-    cy.get('input[formControlName=firstName]').type("User")
-    cy.get('input[formControlName=lastName]').type("User")
-    cy.get('input[formControlName=email]').type("user@studio.com")
-    cy.get('input[formControlName=password]').type(`${"password"}{enter}{enter}`)
-
-    cy.url().should('include', '/login')
-
-    cy.visit('/login')
+  it('Show account information (user) and delete account', () => {
     cy.intercept('POST', '/api/auth/login', {
       body: {
         id: 2,
