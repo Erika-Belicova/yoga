@@ -14,13 +14,6 @@ describe('Detail spec', () => {
       },
     })
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/session',
-      },
-      []).as('session')
-
     cy.intercept('GET', '/api/session', {
       body: [
         {
