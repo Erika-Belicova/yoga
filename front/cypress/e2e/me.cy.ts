@@ -18,8 +18,8 @@ describe('Me spec', () => {
 
     cy.intercept('GET', '/api/session', [])
 
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
     cy.intercept('GET', '/api/user/1', {
@@ -62,14 +62,16 @@ describe('Me spec', () => {
       },
     })
 
-    cy.get('input[formControlName=email]').type("user@studio.com")
-    cy.get('input[formControlName=password]').type(`${"password"}{enter}{enter}`)
+    cy.intercept('GET', '/api/session', [])
+
+    cy.get('input[formControlName=email]').type('user@studio.com')
+    cy.get('input[formControlName=password]').type('password{enter}{enter}')
 
     cy.url().should('include', '/sessions')
 
     cy.intercept('GET', '/api/user/2', {
       body: {
-        id: 1,
+        id: 2,
         email: 'user@studio.com',
         firstName: 'User',
         lastName: 'USER',
@@ -101,6 +103,6 @@ describe('Me spec', () => {
 
     cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Your account has been deleted !')
 
-    cy.url().should('include', '')
+    cy.url().should('eq', Cypress.config().baseUrl)
   });
 });
