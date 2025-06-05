@@ -27,12 +27,12 @@ describe('Form spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    }).as('sessions')
+    })
   });
 
   it('Create session success', () => {
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
     cy.intercept('GET', '/api/teacher', {
@@ -48,24 +48,22 @@ describe('Form spec', () => {
           lastName: 'Dupont'
         }
       ],
-    }).as('teachers')
+    })
 
     cy.contains('span.ml1', 'Create').click()
 
     cy.url().should('include', '/sessions/create')
 
-    cy.get('h1').contains('Create session')
+    cy.get('h1').contains('Create session').should('be.visible')
 
-    cy.get('input[formControlName=name]').type("Session")
-    cy.get('input[formControlName=date]').type("2025-07-28")
-
-    cy.wait('@teachers')
+    cy.get('input[formControlName=name]').type('Session')
+    cy.get('input[formControlName=date]').type('2025-07-28')
 
     cy.get('mat-select[formControlName=teacher_id]').click()
     cy.get('mat-option').should('have.length.at.least', 2)
     cy.get('mat-option').contains('Claire Beaumont').click()
 
-    cy.get('textarea[formControlName=description]').type("A short description")
+    cy.get('textarea[formControlName=description]').type('A short description')
 
     cy.intercept('POST', '/api/session', {
       body: {
@@ -103,11 +101,11 @@ describe('Form spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    }).as('sessions')
+    }).as('newSession')
 
     cy.get('button').contains('Save').click()
 
-    cy.wait('@sessions')
+    cy.wait('@newSession')
 
     cy.get('.mat-simple-snack-bar-content').contains('Session created !')
 
@@ -115,8 +113,8 @@ describe('Form spec', () => {
   });
 
   it('Validation when required fields are empty', () => {
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
 
@@ -133,14 +131,14 @@ describe('Form spec', () => {
           lastName: 'Dupont'
         }
       ],
-    }).as('teachers')
+    })
 
     cy.intercept(
       {
         method: 'POST',
         url: '/api/session',
       },
-      []).as('session')
+      [])
 
     cy.contains('span.ml1', 'Create').click()
 
@@ -172,18 +170,16 @@ describe('Form spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    }).as('sessions')
+    })
 
     cy.get('.mat-icon').click()
-
-    cy.wait('@sessions')
 
     cy.url().should('include', '/sessions')
   });
 
   it('Update session success', () => {
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
 
@@ -200,24 +196,22 @@ describe('Form spec', () => {
           lastName: 'Dupont'
         }
       ],
-    }).as('teachers')
+    })
 
     cy.contains('span.ml1', 'Create').click()
 
     cy.url().should('include', '/sessions/create')
 
-    cy.get('h1').contains('Create session')
+    cy.contains('h1', 'Create session').should('be.visible')
 
-    cy.get('input[formControlName=name]').type("Session")
-    cy.get('input[formControlName=date]').type("2025-07-28")
-
-    cy.wait('@teachers')
+    cy.get('input[formControlName=name]').type('Session')
+    cy.get('input[formControlName=date]').type('2025-07-28')
 
     cy.get('mat-select[formControlName=teacher_id]').click()
     cy.get('mat-option').should('have.length.at.least', 2)
     cy.get('mat-option').contains('Claire Beaumont').click()
 
-    cy.get('textarea[formControlName=description]').type("A short description")
+    cy.get('textarea[formControlName=description]').type('A short description')
 
     cy.intercept('POST', '/api/session', {
       body: {
@@ -255,11 +249,9 @@ describe('Form spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    }).as('sessions')
+    })
 
     cy.get('button').contains('Save').click()
-
-    cy.wait('@sessions')
 
     cy.get('.mat-simple-snack-bar-content').contains('Session created !')
 
@@ -276,24 +268,22 @@ describe('Form spec', () => {
         createdAt: '2025-05-01T12:00:00.000Z',
         updatedAt: '2025-05-01T12:00:00.000Z'
       },
-    }).as('session-edit')
+    })
 
     cy.contains('span.ml1', 'Edit').click()
 
     cy.url().should('include', '/sessions/update/1')
 
-    cy.get('h1').contains('Update session')
+    cy.contains('h1', 'Update session').should('be.visible')
 
-    cy.get('input[formControlName=name]').clear().type("Updated session")
-    cy.get('input[formControlName=date]').clear().type("2025-07-30")
-
-    cy.wait('@teachers')
+    cy.get('input[formControlName=name]').clear().type('Updated session')
+    cy.get('input[formControlName=date]').clear().type('2025-07-30')
 
     cy.get('mat-select[formControlName=teacher_id]').click()
     cy.get('mat-option').should('have.length.at.least', 2)
     cy.get('mat-option').contains('Jean Dupont').click()
 
-    cy.get('textarea[formControlName=description]').clear().type("An updated description")
+    cy.get('textarea[formControlName=description]').clear().type('An updated description')
 
     cy.intercept('PUT', '/api/session/1', {
       body: {
@@ -331,11 +321,9 @@ describe('Form spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    }).as('sessions')
+    })
 
     cy.get('button').contains('Save').click()
-
-    cy.wait('@sessions')
 
     cy.get('.mat-simple-snack-bar-content').contains('Session updated !')
 
@@ -343,8 +331,6 @@ describe('Form spec', () => {
   });
 
   it('Redirect when user does not have access', () => {
-    cy.visit('/login')
-
     cy.intercept('POST', '/api/auth/login', {
       body: {
         id: 1,
@@ -355,15 +341,10 @@ describe('Form spec', () => {
       },
     })
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/session',
-      },
-      []).as('session')
+    cy.intercept('GET', '/api/session', [])
 
-    cy.get('input[formControlName=email]').type("user@studio.com")
-    cy.get('input[formControlName=password]').type(`${"password"}{enter}{enter}`)
+    cy.get('input[formControlName=email]').type('user@studio.com')
+    cy.get('input[formControlName=password]').type('password{enter}{enter}')
 
     cy.url().should('include', '/sessions')
 
