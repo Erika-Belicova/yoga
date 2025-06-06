@@ -33,7 +33,7 @@ describe('Login spec', () => {
     cy.get('input[formControlName=email]').type('yoga@studio.com')
     cy.get('input[formControlName=password]').type('password{enter}{enter}')
 
-    cy.get('.error').should('be.visible').and('contain', 'An error occurred')
+    cy.contains('.error', 'An error occurred').should('be.visible')
 
     cy.url().should('include', '/login')
   });

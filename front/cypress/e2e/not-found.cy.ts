@@ -48,6 +48,6 @@ describe('NotFound spec', () => {
 
     cy.visit('/login/user')
 
-    cy.get('h1').should('be.visible').and('contain.text', 'Page not found !')
+    cy.contains('h1', 'Page not found !').should('be.visible')
   });
 });

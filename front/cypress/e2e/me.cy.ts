@@ -38,13 +38,13 @@ describe('Me spec', () => {
 
     cy.url().should('include', '/me')
 
-    cy.get('h1').should('contain.text', 'User information').should('be.visible')
-    cy.get('p').should('contain.text', 'Name: Admin ADMIN').should('be.visible')
-    cy.get('p').should('contain.text', 'Email: yoga@studio.com').should('be.visible')
-    cy.get('.my2').should('contain.text', 'You are admin').should('be.visible')
+    cy.contains('h1', 'User information').should('be.visible')
+    cy.contains('p', 'Name: Admin ADMIN').should('be.visible')
+    cy.contains('p', 'Email: yoga@studio.com').should('be.visible')
+    cy.contains('.my2', 'You are admin').should('be.visible')
 
-    cy.get('.p2').should('contain.text', 'April 1, 2025').should('be.visible')
-    cy.get('.p2').should('contain.text', 'April 3, 2025').should('be.visible')
+    cy.contains('.p2', 'April 1, 2025').should('be.visible')
+    cy.contains('.p2', 'April 3, 2025').should('be.visible')
 
     cy.get('mat-icon').click()
 
@@ -85,15 +85,15 @@ describe('Me spec', () => {
 
     cy.url().should('include', '/me')
 
-    cy.get('h1').should('contain.text', 'User information').should('be.visible')
-    cy.get('p').should('contain.text', 'Name: User USER').should('be.visible')
-    cy.get('p').should('contain.text', 'Email: user@studio.com').should('be.visible')
+    cy.contains('h1', 'User information').should('be.visible')
+    cy.contains('p', 'Name: User USER').should('be.visible')
+    cy.contains('p', 'Email: user@studio.com').should('be.visible')
 
-    cy.get('.my2 > p').should('contain.text', 'Delete my account:').should('be.visible')
-    cy.get('.ml1').should('contain.text', 'Detail').should('be.visible')
+    cy.contains('.my2 > p', 'Delete my account:').should('be.visible')
+    cy.contains('.ml1', 'Detail').should('be.visible')
 
-    cy.get('.p2').should('contain.text', 'April 1, 2025').should('be.visible')
-    cy.get('.p2').should('contain.text', 'April 3, 2025').should('be.visible')
+    cy.contains('.p2', 'April 1, 2025').should('be.visible')
+    cy.contains('.p2', 'April 3, 2025').should('be.visible')
 
     cy.intercept('DELETE', '/api/user/2', {
       body: {},
@@ -101,7 +101,7 @@ describe('Me spec', () => {
 
     cy.get('.my2 > .mat-focus-indicator').click()
 
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Your account has been deleted !')
+    cy.contains('.mat-simple-snack-bar-content', 'Your account has been deleted !')
 
     cy.url().should('eq', Cypress.config().baseUrl)
   });

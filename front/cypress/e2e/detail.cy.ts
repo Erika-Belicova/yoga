@@ -144,9 +144,9 @@ describe('Detail spec', () => {
 
     cy.url().should('include', '/sessions/detail/1')
 
-    cy.get('h1').contains('Session 1').should('be.visible')
-    cy.get('.ml1').contains('2 attendees').should('be.visible')
-    cy.get('.description').contains('Description: A description').should('be.visible')
+    cy.contains('h1', 'Session 1').should('be.visible')
+    cy.contains('.ml1', '2 attendees').should('be.visible')
+    cy.contains('.description', 'Description: A description').should('be.visible')
     cy.get('.ml1').contains('July 25, 2025')
 
     cy.get('.created').contains('Create at: May 1, 2025')
@@ -176,7 +176,7 @@ describe('Detail spec', () => {
 
     cy.wait('@deleteSession')
 
-    cy.get('.mat-simple-snack-bar-content').contains('Session deleted !')
+    cy.contains('.mat-simple-snack-bar-content', 'Session deleted !')
 
     cy.url().should('include', '/sessions')
   });
@@ -267,9 +267,9 @@ describe('Detail spec', () => {
 
     cy.url().should('include', '/sessions/detail/1')
 
-    cy.get('h1').contains('Session 1').should('be.visible')
-    cy.get('.ml1').contains('2 attendees').should('be.visible')
-    cy.get('.description').contains('Description: A description').should('be.visible')
+    cy.contains('h1', 'Session 1').should('be.visible')
+    cy.contains('.ml1', '2 attendees').should('be.visible')
+    cy.contains('.description', 'Description: A description').should('be.visible')
     cy.get('.ml1').contains('July 25, 2025')
 
     cy.get('.created').contains('Create at: May 1, 2025')
@@ -345,9 +345,9 @@ describe('Detail spec', () => {
 
     cy.url().should('include', '/sessions/detail/1')
 
-    cy.get('h1').contains('Session 1').should('be.visible')
-    cy.get('.ml1').contains('2 attendees').should('be.visible')
-    cy.get('.description').contains('Description: A description').should('be.visible')
+    cy.contains('h1', 'Session 1').should('be.visible')
+    cy.contains('.ml1', '2 attendees').should('be.visible')
+    cy.contains('.description', 'Description: A description').should('be.visible')
     cy.get('.ml1').contains('July 25, 2025')
 
     cy.get('.created').contains('Create at: May 1, 2025')

@@ -21,7 +21,7 @@ describe('Form spec', () => {
           name: 'Session 1',
           description: 'A description',
           date: '2025-07-22T12:00:00.000Z',
-          teacher_id: 2,
+          teacher_id: 1,
           users: [2, 3],
           createdAt: '2025-05-01T12:00:00.000Z',
           updatedAt: '2025-05-01T12:00:00.000Z'
@@ -35,154 +35,6 @@ describe('Form spec', () => {
     cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
 
     cy.url().should('include', '/sessions')
-    cy.intercept('GET', '/api/teacher', {
-      body: [
-        {
-          id: 1,
-          firstName: 'Claire',
-          lastName: 'Beaumont'
-        },
-        {
-          id: 2,
-          firstName: 'Jean',
-          lastName: 'Dupont'
-        }
-      ],
-    })
-
-    cy.contains('span.ml1', 'Create').click()
-
-    cy.url().should('include', '/sessions/create')
-
-    cy.get('h1').contains('Create session').should('be.visible')
-
-    cy.get('input[formControlName=name]').type('Session')
-    cy.get('input[formControlName=date]').type('2025-07-28')
-
-    cy.get('mat-select[formControlName=teacher_id]').click()
-    cy.get('mat-option').should('have.length.at.least', 2)
-    cy.get('mat-option').contains('Claire Beaumont').click()
-
-    cy.get('textarea[formControlName=description]').type('A short description')
-
-    cy.intercept('POST', '/api/session', {
-      body: {
-        id: 2,
-        name: 'sessionName',
-        description: 'description',
-        date: '2025-07-25T12:00:00.000Z',
-        teacher_id: 1,
-        users: [1, 2],
-        createdAt: '2025-05-01T12:00:00.000Z',
-        updatedAt: '2025-05-01T12:00:00.000Z'
-      },
-    })
-
-    cy.intercept('GET', '/api/session', {
-      body: [
-        {
-          id: 1,
-          name: 'Session 1',
-          description: 'A description',
-          date: '2025-07-22T12:00:00.000Z',
-          teacher_id: 2,
-          users: [2, 3],
-          createdAt: '2025-05-01T12:00:00.000Z',
-          updatedAt: '2025-05-01T12:00:00.000Z'
-        },
-        {
-          id: 2,
-          name: 'Session 2',
-          description: 'A short description',
-          date: '2025-07-25T12:00:00.000Z',
-          teacher_id: 1,
-          users: [1, 2],
-          createdAt: '2025-05-01T12:00:00.000Z',
-          updatedAt: '2025-05-01T12:00:00.000Z'
-        }
-      ],
-    }).as('newSession')
-
-    cy.get('button').contains('Save').click()
-
-    cy.wait('@newSession')
-
-    cy.get('.mat-simple-snack-bar-content').contains('Session created !')
-
-    cy.url().should('include', '/sessions')
-  });
-
-  it('Validation when required fields are empty', () => {
-    cy.get('input[formControlName=email]').type('yoga@studio.com')
-    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
-
-    cy.url().should('include', '/sessions')
-
-    cy.intercept('GET', '/api/teacher', {
-      body: [
-        {
-          id: 1,
-          firstName: 'Claire',
-          lastName: 'Beaumont'
-        },
-        {
-          id: 2,
-          firstName: 'Jean',
-          lastName: 'Dupont'
-        }
-      ],
-    })
-
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/session',
-      },
-      [])
-
-    cy.contains('span.ml1', 'Create').click()
-
-    cy.url().should('include', '/sessions/create')
-
-    cy.get('input[formControlName=name]').click().blur()
-    cy.get('input[formControlName=name]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
-
-    cy.get('input[formControlName=date]').click().blur()
-    cy.get('input[formControlName=date]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
-
-    cy.get('mat-select[formControlName=teacher_id]').click().blur()
-    cy.get('body').click(0, 0).blur()
-    cy.get('mat-select[formControlName=teacher_id]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
-
-    cy.get('textarea[formControlName=description]').click().blur()
-    cy.get('textarea[formControlName=description]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
-
-    cy.intercept('GET', '/api/session', {
-      body: [
-        {
-          id: 1,
-          name: 'Session 1',
-          description: 'A description',
-          date: '2025-07-22T12:00:00.000Z',
-          teacher_id: 2,
-          users: [2, 3],
-          createdAt: '2025-05-01T12:00:00.000Z',
-          updatedAt: '2025-05-01T12:00:00.000Z'
-        }
-      ],
-    })
-
-    cy.get('.mat-icon').click()
-
-    cy.url().should('include', '/sessions')
-  });
-
-  it('Update session success', () => {
-    cy.get('input[formControlName=email]').type('yoga@studio.com')
-    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
-
-    cy.url().should('include', '/sessions')
-
     cy.intercept('GET', '/api/teacher', {
       body: [
         {
@@ -249,22 +101,121 @@ describe('Form spec', () => {
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
-    })
+    }).as('newSession')
 
     cy.get('button').contains('Save').click()
 
-    cy.get('.mat-simple-snack-bar-content').contains('Session created !')
+    cy.wait('@newSession')
+
+    cy.contains('.mat-simple-snack-bar-content', 'Session created !')
 
     cy.url().should('include', '/sessions')
+  });
+
+  it('Validation when required fields are empty', () => {
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
+
+    cy.url().should('include', '/sessions')
+
+    cy.intercept('GET', '/api/teacher', {
+      body: [
+        {
+          id: 1,
+          firstName: 'Claire',
+          lastName: 'Beaumont'
+        },
+        {
+          id: 2,
+          firstName: 'Jean',
+          lastName: 'Dupont'
+        }
+      ],
+    })
+
+    cy.intercept(
+      {
+        method: 'POST',
+        url: '/api/session',
+      },
+      [])
+
+    cy.contains('span.ml1', 'Create').click()
+
+    cy.url().should('include', '/sessions/create')
+
+    cy.get('input[formControlName=name]').click().blur()
+    cy.get('input[formControlName=name]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
+
+    cy.get('input[formControlName=date]').click().blur()
+    cy.get('input[formControlName=date]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
+
+    cy.get('mat-select[formControlName=teacher_id]').click().blur()
+    cy.get('body').click(0, 0).blur()
+    cy.get('mat-select[formControlName=teacher_id]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
+
+    cy.get('textarea[formControlName=description]').click().blur()
+    cy.get('textarea[formControlName=description]').should('have.class', 'ng-touched').and('have.class', 'ng-invalid')
+
+    cy.intercept('GET', '/api/session', {
+      body: [
+        {
+          id: 1,
+          name: 'Session 1',
+          description: 'A description',
+          date: '2025-07-22T12:00:00.000Z',
+          teacher_id: 2,
+          users: [2, 3],
+          createdAt: '2025-05-01T12:00:00.000Z',
+          updatedAt: '2025-05-01T12:00:00.000Z'
+        },
+        {
+          id: 2,
+          name: 'Session 2',
+          description: 'A short description',
+          date: '2025-07-25T12:00:00.000Z',
+          teacher_id: 1,
+          users: [1, 2],
+          createdAt: '2025-05-01T12:00:00.000Z',
+          updatedAt: '2025-05-01T12:00:00.000Z'
+        }
+      ],
+    })
+
+    cy.get('.mat-icon').click()
+
+    cy.url().should('include', '/sessions')
+  });
+
+  it('Update session success', () => {
+    cy.get('input[formControlName=email]').type('yoga@studio.com')
+    cy.get('input[formControlName=password]').type('test!1234{enter}{enter}')
+
+    cy.url().should('include', '/sessions')
+
+    cy.intercept('GET', '/api/teacher', {
+      body: [
+        {
+          id: 1,
+          firstName: 'Claire',
+          lastName: 'Beaumont'
+        },
+        {
+          id: 2,
+          firstName: 'Jean',
+          lastName: 'Dupont'
+        }
+      ],
+    })
 
     cy.intercept('GET', '/api/session/1', {
       body: {
         id: 1,
-        name: 'sessionName',
-        description: 'description',
-        date: '2025-07-25T12:00:00.000Z',
+        name: 'Session 1',
+        description: 'A description',
+        date: '2025-07-22T12:00:00.000Z',
         teacher_id: 1,
-        users: [1, 2],
+        users: [2, 3],
         createdAt: '2025-05-01T12:00:00.000Z',
         updatedAt: '2025-05-01T12:00:00.000Z'
       },
@@ -287,12 +238,12 @@ describe('Form spec', () => {
 
     cy.intercept('PUT', '/api/session/1', {
       body: {
-        id: 2,
-        name: 'sessionName',
-        description: 'description',
-        date: '2025-07-25T12:00:00.000Z',
-        teacher_id: 1,
-        users: [1, 2],
+        id: 1,
+        name: 'Updated session',
+        description: 'An updated description',
+        date: '2025-07-30T12:00:00.000Z',
+        teacher_id: 2,
+        users: [2, 3],
         createdAt: '2025-05-01T12:00:00.000Z',
         updatedAt: '2025-05-01T12:00:00.000Z'
       },
@@ -304,28 +255,17 @@ describe('Form spec', () => {
           id: 1,
           name: 'Updated session',
           description: 'An updated description',
-          date: '2025-07-24T12:00:00.000Z',
-          teacher_id: 1,
+          date: '2025-07-30T12:00:00.000Z',
+          teacher_id: 2,
           users: [2, 3],
-          createdAt: '2025-05-01T12:00:00.000Z',
-          updatedAt: '2025-05-01T12:00:00.000Z'
-        },
-        {
-          id: 2,
-          name: 'Session 2',
-          description: 'An short description',
-          date: '2025-07-28T12:00:00.000Z',
-          teacher_id: 1,
-          users: [1, 2],
           createdAt: '2025-05-01T12:00:00.000Z',
           updatedAt: '2025-05-01T12:00:00.000Z'
         }
       ],
     })
 
-    cy.get('button').contains('Save').click()
-
-    cy.get('.mat-simple-snack-bar-content').contains('Session updated !')
+    cy.contains('button', 'Save').click()
+    cy.contains('.mat-simple-snack-bar-content', 'Session updated !')
 
     cy.url().should('include', '/sessions')
   });
