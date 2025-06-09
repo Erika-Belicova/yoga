@@ -215,7 +215,7 @@ Password: test!1234
 
   The test log is visible in the console. The integrated H2 database is preconfigured and used automatically during testing.
 
-### Access the Back-end Coverage Reports
+### Generate the Back-end Coverage Reports
 
 - Generate the coverage reports for the back-end application with:
   
