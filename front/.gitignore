@@ -46,3 +46,4 @@ Thumbs.db
 # Coverage
 coverage/
 .nyc_output/
+cypress/downloads/
