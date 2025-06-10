@@ -6,13 +6,19 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "e2e:ci": "ng run yoga:e2e-ci",
+    "e2e": "ng run yoga:e2e-ci",
+    "e2e:ng": "ng e2e",
     "e2e:coverage": "npx nyc report --reporter=lcov --reporter=text-summary",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
   "private": true,
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "exclude": [
+      "src/main.ts"
+    ]
+  },
   "dependencies": {
     "@angular/animations": "14.2.0",
     "@angular/cdk": "14.2.0",

@@ -22,7 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { mockTeachers } from 'src/app/mocks/teacher.mocks';
 import { mockSession, mockUpdatedSession } from 'src/app/mocks/session.mocks';
 
-describe('FormComponent (Integration)', () => {
+describe('FormComponent', () => {
   let component: FormComponent;
   let fixture: ComponentFixture<FormComponent>;
 
